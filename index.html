@@ -225,7 +225,11 @@ document.getElementById("analyzeReference").addEventListener("click",makeReferen
 document.getElementById("copyManual").addEventListener("click",async()=>{if(!referenceResult?.manual)return alert("Analisis video referensi terlebih dahulu.");try{await navigator.clipboard.writeText(referenceResult.manual)}catch(e){prompt("Salin skrip manusia:",referenceResult.manual)}});
 document.getElementById("copyAIPrompt").addEventListener("click",async()=>{if(!referenceResult?.prompt)return alert("Analisis video referensi terlebih dahulu.");try{await navigator.clipboard.writeText(referenceResult.prompt)}catch(e){prompt("Salin prompt Omni Flash:",referenceResult.prompt)}});
 document.getElementById("analyzeUsername").addEventListener("click",()=>{const raw=(document.getElementById("ttUsername").value||"").trim();const username=raw.replace(/^@/,"");const status=document.getElementById("usernameStatus");if(!username){status.textContent="Masukkan username TikTok terlebih dahulu.";return}if(!/^[A-Za-z0-9._]{2,24}$/.test(username)){status.textContent="Format username belum valid. Gunakan huruf, angka, titik, atau garis bawah.";return}status.textContent=`Username @${username} dipilih. Analisis yang terlihat saat ini masih memakai data demo; pengambilan video dan metrik akun asli memerlukan autentikasi serta integrasi backend TikTok yang diizinkan.`;document.getElementById("accountConnect").dataset.username=username;});
-document.getElementById("connectTikTok").addEventListener("click",()=>{document.getElementById("usernameStatus").textContent="Koneksi OAuth TikTok belum diaktifkan pada prototipe ini. Tombol ini baru dapat menghubungkan akun setelah backend dan izin API resmi disiapkan.";});
+
+document.getElementById("connectTikTok").addEventListener("click", () => {
+  window.location.href = "/api/tiktok-login";
+});
+
 document.getElementById("exportBtn").addEventListener("click",()=>download("affilens-data-export.json",JSON.stringify({products,videos,exportedAt:new Date().toISOString()},null,2),"application/json"));
 renderAll();
 </script>
