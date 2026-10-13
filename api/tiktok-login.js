@@ -1,23 +1,22 @@
 
+import crypto from "node:crypto";
+
 export default function handler(req, res) {
   if (req.method !== "GET") {
-    return res.status(405).json({
-      error: "Method not allowed",
-    });
+    return res.status(405).send("Method not allowed");
   }
 
   const clientKey = process.env.TIKTOK_CLIENT_KEY;
   const redirectUri = process.env.TIKTOK_REDIRECT_URI;
 
   if (!clientKey || !redirectUri) {
-    return res.status(500).json({
-      error: "Konfigurasi TikTok belum lengkap di server.",
-    });
+    return res.status(500).send(
+      "Konfigurasi TikTok belum lengkap di server."
+    );
   }
 
-  const state = crypto.randomUUID();
+  const state = crypto.randomBytes(32).toString("hex");
 
-  // Simpan state di cookie agar callback bisa memverifikasinya.
   res.setHeader("Set-Cookie", [
     `tiktok_oauth_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600`,
   ]);
